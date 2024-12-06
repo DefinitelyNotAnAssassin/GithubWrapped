@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
-import GitHubWrapped from "./components/GithubWrapped";
+import GitHubWrapped from "./components/GitHubWrapped";
 
 export const router = createBrowserRouter([
     {

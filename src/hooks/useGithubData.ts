@@ -74,7 +74,7 @@ export const useGitHubData = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `INSERT YOUR GITHUB TOKEN HERE`,
+        Authorization: `token `,
       },
       body: JSON.stringify({
         query: GET_USER_DATA,

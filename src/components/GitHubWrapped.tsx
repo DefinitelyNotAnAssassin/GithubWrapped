@@ -21,7 +21,7 @@ import {
 } from './StoryComponents'
 
 
-const STORY_DURATION = 8000 // 8 seconds per story
+const STORY_DURATION = 5000 // 5 seconds per story
 
 export default function GitHubWrappedStories() {
   const username = location.pathname.split('/').pop() || ''
@@ -52,16 +52,20 @@ export default function GitHubWrappedStories() {
     }
     fetchData()
   }, [username])
-
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
     if (!isPaused && data) {
       intervalId = setInterval(() => {
         setProgress(prev => {
           if (prev >= 100) {
-            setCurrentStory(current => 
-              current < stories.length - 1 ? current + 1 : 0
-            );
+            setCurrentStory(current => {
+              if (current < stories.length - 1) {
+                return current + 1;
+              } else {
+                setIsPaused(true);
+                return current;
+              }
+            });
             return 0;
           }
           return prev + (100 / (STORY_DURATION / 50));
@@ -111,7 +115,7 @@ export default function GitHubWrappedStories() {
     {
       title: "Active and Inactive Days",
       component: ActiveDaysStory,
-      backgroundColor: "from-pink-900 to-pink-700"
+      backgroundColor: "from-gray-900 to-gray-700"
     },
     {
       title: "Most Active Day and Hour",
@@ -157,7 +161,7 @@ export default function GitHubWrappedStories() {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.3 }}
       >
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <motion.circle
@@ -173,7 +177,7 @@ export default function GitHubWrappedStories() {
           />
         </svg>
       </motion.div>
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-[90vw]  relative z-10 ">
         {/* Progress Bar */}
         <motion.div 
           className="top-0 left-0 right-0 h-1 bg-white/30 z-10"
@@ -184,7 +188,7 @@ export default function GitHubWrappedStories() {
           <motion.div 
             className="h-full bg-white" 
             style={{ width: `${progress}%` }}
-            transition={{ duration: 0.05 }}
+            transition={{ ease: "linear", duration: 0.5 }}
           />
         </motion.div>
 
@@ -207,9 +211,7 @@ export default function GitHubWrappedStories() {
         {/* Story Controls */}
         <motion.div 
           className="absolute top-4 right-4 z-20"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+
         >
           <Button 
             variant="ghost" 
@@ -225,11 +227,10 @@ export default function GitHubWrappedStories() {
         <AnimatePresence mode="wait">
           <motion.div 
             key={currentStory}
-            initial={{ opacity: 0, y: 50, rotateX: -15 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          
             exit={{ opacity: 0, y: -50, rotateX: 15 }}
-            transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-            className="relative z-10 h-[75vh] perspective-1000"
+            className=" z-10 h-[75vh] w-full  perspective-1000"
+            transition={{ duration: 1 }}
           >
             {stories[currentStory].component({ data })}
           </motion.div>
@@ -238,8 +239,7 @@ export default function GitHubWrappedStories() {
         {/* Navigation Buttons */}
         <motion.div 
           className="absolute top-1/2 z-50 transform -translate-y-1/2 w-full flex justify-between"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+         
           transition={{ duration: 0.5, delay: 0.5 }}
         >
           <Button 
@@ -303,26 +303,3 @@ function ErrorStory({ message }: { message: string }) {
 
 
 
-function ContributionsStory({ data }: { data: GitHubData }) {
-  return (
-    <div className="bg-white/10 rounded-2xl p-6 text-white flex flex-col justify-center items-center h-full">
-      <h2 className="text-2xl font-bold mb-6 text-center">Your 2024 GitHub Journey</h2>
-      <div className="space-y-4">
-        <div className="bg-white/10 p-4 rounded-xl">
-          <p className="text-white/70 mb-2">Total Contributions</p>
-          <p className="text-4xl font-bold">{data.contributions2024.totalContributions}</p>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white/10 p-4 rounded-xl">
-            <p className="text-white/70 mb-2">Longest Streak</p>
-            <p className="text-3xl font-bold">{data.contributions2024.longestStreak} days</p>
-          </div>
-          <div className="bg-white/10 p-4 rounded-xl">
-            <p className="text-white/70 mb-2">Active Days</p>
-            <p className="text-3xl font-bold">{data.contributions2024.activeDays}/365</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}

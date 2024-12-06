@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 
 const staggerChildren = {
   initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  animate: { opacity: 1, transition: { staggerChildren: 5 } }
 }
 const fadeInUp = {
     initial: { y: 20, opacity: 0 },
@@ -178,8 +178,7 @@ export function ProfileStory({ data }: { data: GitHubData }) {
       <motion.div 
         className="bg-white/10 rounded-2xl p-6 text-white flex flex-col items-center justify-center h-full relative overflow-hidden"
         variants={staggerChildren}
-        initial="initial"
-        animate="animate"
+        
       >
         <motion.h2 variants={fadeInUp} className="text-3xl font-bold mb-6 text-center z-10">
           Your 2024 GitHub Journey
@@ -190,46 +189,11 @@ export function ProfileStory({ data }: { data: GitHubData }) {
         <motion.p variants={fadeInUp} className="text-xl mb-6 text-center z-10">
           Your code speaks volumes. Keep pushing those commits!
         </motion.p>
-        <motion.div 
-          variants={fadeInUp} 
-          className="text-2xl font-bold mb-4 z-10"
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          Welcome to 2025!
-        </motion.div>
+   
         <motion.p variants={fadeInUp} className="text-lg text-center z-10">
           May your code be bug-free and your pull requests be swiftly merged.
         </motion.p>
-        <motion.div 
-          className="absolute inset-0 z-0" 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute bg-white/10 rounded-full"
-              style={{
-                width: Math.random() * 50 + 10,
-                height: Math.random() * 50 + 10,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                x: Math.random() * 100 - 50,
-                y: Math.random() * 100 - 50,
-                opacity: [0.2, 0.5, 0.2],
-              }}
-              transition={{
-                duration: Math.random() * 5 + 5,
-                repeat: Infinity,
-                repeatType: "reverse",
-              }}
-            />
-          ))}
-        </motion.div>
+      
       </motion.div>
     )
   }
